@@ -1,0 +1,42 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: pocketflow-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: pocketflow
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - pocketflow-network
+
+  backend:
+    build: .
+    container_name: pocketflow-backend
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - MONGO_URI=mongodb://${MONGO_USER:-admin}:${MONGO_PASSWORD}@mongodb:27017/pocketflow?authSource=admin
+    depends_on:
+      - mongodb
+    volumes:
+      - ./src:/app/src
+      - ./server.js:/app/server.js
+      - ./package.json:/app/package.json
+    networks:
+      - pocketflow-network
+    command: npm run dev
+
+volumes:
+  mongodb_data:
+
+networks:
+  pocketflow-network:
+    driver: bridge
