@@ -5,6 +5,8 @@ const connectDB = require('./src/Config/db');
 const budgetRoutes = require('./src/Routes/budgets');
 const errorHandler = require('./src/Middlewares/errorHandler');
 
+const analyticsRoutes = require('./src/Routes/analytics');
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -18,6 +20,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/budgets', budgetRoutes);
+
+
+app.use('/api/analytics', analyticsRoutes);
 
 app.use(errorHandler);
 
