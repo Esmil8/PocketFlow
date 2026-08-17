@@ -26,7 +26,43 @@ const getBudgets = async (req, res, next) => {
     }
 };
 
+const updateBudget = async (req, res, next) => {
+    try {
+        const presupuesto = await budgetsService.updateBudget(req.params.id, req.body);
+
+        if (!presupuesto) {
+            return res.status(404).json({
+                success: false,
+                error: 'Presupuesto no encontrado'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Presupuesto actualizado exitosamente',
+            data: presupuesto
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getAlerts = async (req, res, next) => {
+    try {
+        const alertas = await budgetsService.getAlerts(req.query);
+        res.status(200).json({
+            success: true,
+            count: alertas.length,
+            data: alertas
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createBudget,
-    getBudgets
+    getBudgets,
+    updateBudget,
+    getAlerts
 };

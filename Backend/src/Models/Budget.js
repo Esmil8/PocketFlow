@@ -18,18 +18,18 @@ const CATEGORIES = [
 const budgetSchema = new mongoose.Schema({
     categoria: {
         type: String,
-        required: [true, 'La categoría es requerida'],
+        required: [true, 'La categoria es requerida'],
         trim: true,
         uppercase: true,
         enum: {
             values: CATEGORIES,
-            message: 'Categoría no válida'
+            message: 'Categoria no valida'
         }
     },
     limite: {
         type: Number,
-        required: [true, 'El límite del presupuesto es requerido'],
-        min: [0.01, 'El límite debe ser mayor a 0']
+        required: [true, 'El limite del presupuesto es requerido'],
+        min: [0.01, 'El limite debe ser mayor a 0']
     },
     mes: {
         type: Number,
@@ -40,15 +40,15 @@ const budgetSchema = new mongoose.Schema({
     },
     anio: {
         type: Number,
-        required: [true, 'El año es requerido'],
-        min: [2000, 'Año no válido'],
-        max: [2100, 'Año no válido'],
+        required: [true, 'El anio es requerido'],
+        min: [2000, 'Anio no valido'],
+        max: [2100, 'Anio no valido'],
         default: () => new Date().getFullYear()
     },
     descripcion: {
         type: String,
         trim: true,
-        maxlength: [200, 'La descripción no puede pasar de 200 caracteres'],
+        maxlength: [200, 'La descripcion no puede pasar de 200 caracteres'],
         default: ''
     }
 }, {
