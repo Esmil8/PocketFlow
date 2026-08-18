@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./src/Config/db');
 const budgetRoutes = require('./src/Routes/budgets');
 const errorHandler = require('./src/Middlewares/errorHandler');
+const expensesRoutes = require('./src/Routes/expenses');
 
 const analyticsRoutes = require('./src/Routes/analytics');
 
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
     res.send('PocketFlow API running');
 });
 
+app.use('/api/expenses', expensesRoutes);
 app.use('/api/budgets', budgetRoutes);
 
 
