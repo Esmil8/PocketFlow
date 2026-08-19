@@ -187,12 +187,10 @@ input[type="month"]:hover {
 }
 
 @keyframes pulseBorder {
-
   0%,
   100% {
     border-color: rgba(248, 113, 113, 0.4);
   }
-
   50% {
     border-color: rgba(248, 113, 113, 0.8);
   }
@@ -297,7 +295,7 @@ input[type="month"]:hover {
 }
 
 .progress-container {
-  margin: 16px 0;
+  margin: 14px 0 6px;
 }
 
 .progress-labels {
@@ -343,13 +341,38 @@ input[type="month"]:hover {
 
 .budget-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
   padding-top: 12px;
   border-top: 1px solid var(--border);
+}
+
+.budget-description {
   font-size: 12px;
   color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.budget-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.budget-percentage-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.budget-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-edit-small {
@@ -369,6 +392,25 @@ input[type="month"]:hover {
 .btn-edit-small:hover {
   color: var(--text);
   border-color: var(--border-focus);
+}
+
+.btn-delete-small {
+  background: transparent;
+  border: 1px solid var(--danger-soft);
+  color: var(--danger);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-small:hover {
+  background: var(--danger-soft);
+  border-color: var(--danger);
 }
 
 .modal-overlay {
