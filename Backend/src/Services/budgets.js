@@ -63,6 +63,11 @@ const updateBudget = async (id, data) => {
     return presupuesto;
 };
 
+const deleteBudget = async (id) => {
+    const presupuesto = await Budget.findByIdAndDelete(id);
+    return presupuesto;
+};
+
 const getAlerts = async (filters = {}) => {
     let mes = filters.mes ? Number(filters.mes) : null;
     let anio = filters.anio ? Number(filters.anio) : null;
@@ -107,24 +112,25 @@ const getAlerts = async (filters = {}) => {
         const gastado = gastosMap[presupuesto.categoria] || 0;
         const porcentaje = (gastado / presupuesto.limite) * 100;
 
-        if (porcentaje >= 80) {
-            let nivel = 'advertencia';
-            let mensaje = `Has usado el ${porcentaje.toFixed(1)}% de tu presupuesto de ${presupuesto.categoria}`;
+        let nivel = 'normal';
+        let mensaje = `Has usado el ${porcentaje.toFixed(1)}% de tu presupuesto de ${presupuesto.categoria}`;
 
-            if (porcentaje >= 100) {
-                nivel = 'critico';
-                mensaje = `Has usado el ${porcentaje.toFixed(1)}% de tu presupuesto de ${presupuesto.categoria}`;
-            }
-
-            alertas.push({
-                categoria: presupuesto.categoria,
-                limite: presupuesto.limite,
-                gastado: parseFloat(gastado.toFixed(2)),
-                porcentaje: parseFloat(porcentaje.toFixed(1)),
-                nivel,
-                mensaje
-            });
+        if (porcentaje >= 100) {
+            nivel = 'critico';
+            mensaje = `Has usado el ${porcentaje.toFixed(1)}% de tu presupuesto de ${presupuesto.categoria}`;
+        } else if (porcentaje >= 80) {
+            nivel = 'advertencia';
+            mensaje = `Has usado el ${porcentaje.toFixed(1)}% de tu presupuesto de ${presupuesto.categoria}`;
         }
+
+        alertas.push({
+            categoria: presupuesto.categoria,
+            limite: presupuesto.limite,
+            gastado: parseFloat(gastado.toFixed(2)),
+            porcentaje: parseFloat(porcentaje.toFixed(1)),
+            nivel,
+            mensaje
+        });
     });
 
     return alertas;
@@ -134,5 +140,6 @@ module.exports = {
     createBudget,
     getBudgets,
     updateBudget,
+    deleteBudget,
     getAlerts
 };

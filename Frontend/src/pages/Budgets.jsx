@@ -33,6 +33,15 @@ const EditIcon = () => (
   </svg>
 );
 
+const TrashIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+);
+
 const AlertTriangleIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
@@ -92,7 +101,6 @@ function Budgets() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBudgetId, setEditingBudgetId] = useState(null);
-
   const [formData, setFormData] = useState({
     categoria: 'FOOD',
     limite: '',
@@ -106,12 +114,9 @@ function Budgets() {
   };
 
   const showToast = (message, type = 'success') => {
-
     const id = Date.now();
-
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
-
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 4000);
   };
@@ -122,7 +127,6 @@ function Budgets() {
 
   const fetchBudgetsAndAlerts = async () => {
     try {
-
       setLoading(true);
       setError('');
       const { mes, anio } = getSelectedMonthYear();
@@ -143,18 +147,14 @@ function Budgets() {
   };
 
   const handleOpenModal = (budgetToEdit = null) => {
-
     if (budgetToEdit) {
       setEditingBudgetId(budgetToEdit._id);
-
       setFormData({
         categoria: budgetToEdit.categoria,
         limite: budgetToEdit.limite,
         descripcion: budgetToEdit.descripcion || ''
       });
-
-    }
-    else {
+    } else {
       setEditingBudgetId(null);
       setFormData({
         categoria: 'FOOD',
@@ -166,17 +166,13 @@ function Budgets() {
   };
 
   const handleCloseModal = () => {
-
     setIsModalOpen(false);
     setEditingBudgetId(null);
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
     try {
-
       const { mes, anio } = getSelectedMonthYear();
       const payload = {
         categoria: formData.categoria,
@@ -189,31 +185,46 @@ function Budgets() {
       if (editingBudgetId) {
         await axios.put(`${API_BASE}/${editingBudgetId}`, payload);
         showToast('Presupuesto actualizado exitosamente', 'success');
-      }
-      else {
-
+      } else {
         await axios.post(API_BASE, payload);
         showToast('Presupuesto asignado exitosamente', 'success');
       }
 
       handleCloseModal();
       fetchBudgetsAndAlerts();
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
       const errMsg = err.response?.data?.errors?.[0]?.message || 'Error al guardar el presupuesto';
       showToast(errMsg, 'error');
     }
   };
 
-  const formatMoney = (val) =>
+  const handleDeleteBudget = async (id) => {
+    const confirmed = window.confirm('¿Estás seguro de que deseas eliminar este presupuesto?');
+    if (!confirmed) return;
 
+    try {
+      await axios.delete(`${API_BASE}/${id}`);
+      showToast('Presupuesto eliminado exitosamente', 'success');
+      fetchBudgetsAndAlerts();
+    } catch (err) {
+      console.error(err);
+      const errMsg = err.response?.data?.error || 'Error al eliminar el presupuesto';
+      showToast(errMsg, 'error');
+    }
+  };
+
+  const formatMoney = (val) =>
     `$${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   const getCategorySpend = (catName) => {
     const alertMatch = alerts.find((a) => a.categoria.toUpperCase() === catName.toUpperCase());
     return alertMatch ? alertMatch.gastado : 0;
   };
+
+  const activeAlerts = alerts.filter(
+    (a) => a.nivel === 'advertencia' || a.nivel === 'critico' || a.porcentaje >= 80
+  );
 
   return (
     <div className="budgets-container">
@@ -256,9 +267,9 @@ function Budgets() {
 
       {error && <div className="error-banner">{error}</div>}
 
-      {alerts.length > 0 && (
+      {activeAlerts.length > 0 && (
         <section className="alerts-banner-grid">
-          {alerts.map((alert, idx) => {
+          {activeAlerts.map((alert, idx) => {
             const isCritical = alert.nivel === 'critico' || alert.porcentaje >= 100;
             return (
               <div
@@ -331,13 +342,29 @@ function Budgets() {
                   </div>
 
                   <div className="budget-footer">
-                    <span>Usado: {realPct.toFixed(1)}%</span>
-                    <button
-                      className="btn-edit-small"
-                      onClick={() => handleOpenModal(b)}
-                    >
-                      <EditIcon /> Editar Límite
-                    </button>
+                    {b.descripcion && (
+                      <div className="budget-description">
+                        <span>"{b.descripcion}"</span>
+                      </div>
+                    )}
+
+                    <div className="budget-footer-row">
+                      <span className="budget-percentage-label">Usado: {realPct.toFixed(1)}%</span>
+                      <div className="budget-card-actions">
+                        <button
+                          className="btn-edit-small"
+                          onClick={() => handleOpenModal(b)}
+                        >
+                          <EditIcon /> Editar Límite
+                        </button>
+                        <button
+                          className="btn-delete-small"
+                          onClick={() => handleDeleteBudget(b._id)}
+                        >
+                          <TrashIcon /> Eliminar
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
