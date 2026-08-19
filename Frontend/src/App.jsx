@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import Expenses from './pages/Expenses';
 import Analytics from './pages/Analytics';
 import Budgets from './pages/Budgets';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('budgets');
+  const [activeTab, setActiveTab] = useState('expenses');
 
   return (
     <div>
@@ -15,6 +16,12 @@ function App() {
           </span>
         </div>
         <div className="nav-tabs">
+          <button
+            className={`nav-tab ${activeTab === 'expenses' ? 'active' : ''}`}
+            onClick={() => setActiveTab('expenses')}
+          >
+            Gastos
+          </button>
           <button
             className={`nav-tab ${activeTab === 'budgets' ? 'active' : ''}`}
             onClick={() => setActiveTab('budgets')}
@@ -30,7 +37,9 @@ function App() {
         </div>
       </nav>
 
-      {activeTab === 'budgets' ? <Budgets /> : <Analytics />}
+      {activeTab === 'expenses' && <Expenses />}
+      {activeTab === 'budgets' && <Budgets />}
+      {activeTab === 'analytics' && <Analytics />}
     </div>
   );
 }

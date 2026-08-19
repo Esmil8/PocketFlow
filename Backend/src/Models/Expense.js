@@ -30,7 +30,7 @@ const ExpenseSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Category is required'],
         enum: {
-            values: CATEGORIES,
+            values: CATEGORIES.map((c) => c.toUpperCase()),
             message: 'Invalid category'
         },
         trim: true,
@@ -95,18 +95,16 @@ ExpenseSchema.statics.getCurrentMonth = function () {
     });
 };
 
-ExpenseSchema.pre('save', function (next) {
+ExpenseSchema.pre('save', function () {
     if (this.categoria) {
         this.categoria = this.categoria.toUpperCase();
     }
-    next();
 });
 
-ExpenseSchema.pre('save', function (next) {
+ExpenseSchema.pre('save', function () {
     if (this.monto) {
         this.monto = parseFloat(this.monto.toFixed(2));
     }
-    next();
 });
 
 ExpenseSchema.virtual('year').get(function () {

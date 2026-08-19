@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  --bg: #0b1220;
+  --surface: #121b2e;
+  --surface-alt: #182338;
+  --border: #263352;
+  --border-focus: #34d399;
+  --text: #e9eefb;
+  --text-muted: #8c9ac2;
+  --accent: #34d399;
+  --accent-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.15);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.15);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --radius: 12px;
+}
+
+.expenses-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.expenses-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.expenses-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.expenses-actions select {
+  font-family: var(--font-body);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  min-width: 170px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.expenses-actions select:focus,
+.expenses-actions select:hover {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.expenses-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.expenses-section-header h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin: 0;
+  color: var(--text);
+}
+
+.ledger-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.ledger-scroll {
+  overflow-x: auto;
+}
+
+table.ledger {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+table.ledger thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+
+table.ledger td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+table.ledger tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.ledger tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.col-amount {
+  text-align: right;
+}
+
+.col-actions {
+  text-align: right;
+  width: 100px;
+}
+
+td.col-amount {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-align: right;
+  color: var(--accent);
+}
+
+.badge-cat {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.desc-cell {
+  color: var(--text-muted);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  color: var(--text);
+  border-color: var(--border-focus);
+}
+
+.btn-icon.danger:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.empty-chart-state {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  background: var(--surface-alt);
+  padding: 24px 18px;
+  text-align: center;
+}
+
+.confirm-text {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+.confirm-text strong {
+  color: var(--text);
+}
+
+.field-error {
+  font-size: 12px;
+  color: var(--danger);
+  margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .desc-cell {
+    max-width: 140px;
+  }
+}
